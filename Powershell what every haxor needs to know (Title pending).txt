@@ -1,0 +1,26 @@
+Title : Powershell.. what every hax0r needs to know
+Expected Length : 40 mins
+Abstract :
+PowerShell (which now ships with Windows 7 / Windows Server 2008) is
+an extensible automation engine from Microsoft, with its own shell and
+associated scripting language.
+This talk will aim at convincing the audience that they need to add
+Powershell to their hacking toolkit.
+We will begin with a quick introduction to Powershell to ensure that
+everyone is able to keep up with the sections that follow.
+We will then examine some "classic" pen-testing tools (from
+portscanners to attack-tools), and will demonstrate how their
+functionality can be replicated natively with powershell.
+We will finally demonstrate Powershells utility on compromised hosts..
+(This talk is full of live demos and examples.)
+
+
+
+Where to start , Powershell is the answer to something that sysadmins and pentesters everywhere have been requesting for ages,  A reliable way to interact with windows systems without the need for a GUI and to do this repeatedly.
+Powershell solves both these problems by giving you access to pretty much anything u can do in windows via the GUI through the command line. Also because it’s a scripting language you can repeat everything you do identically.
+So now that you have a basic idea behind the basic concept of powershell ,it’s time to turn things to a more security focused  perspective.
+First of all why should you bother learning powershell , well its embedded in every windows 7 installation (from the most basic to the most advanced SKU’s) and in WIN2K8R2. With win7 becoming more and more popular chances are every time you pop a box or scan a network you are going to find one of those 2 OS’s installed. Chances are you have it installed right now :P
+So a quick intro to what I am going to be showing  :
+1. A quick intro on how to access and use powershell
+2. I’ll show you what you can do from a win7 machine , i.e. if its your base OS 
+3. I’ll show you what you can do if you gain access to another win7 machine 
