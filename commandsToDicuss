@@ -1,0 +1,4 @@
+Get-PeHeader
+Export-csv
+ConvertTo-Xml
+
