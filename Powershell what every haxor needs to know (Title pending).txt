@@ -14,6 +14,13 @@ functionality can be replicated natively with powershell.
 We will finally demonstrate Powershells utility on compromised hosts..
 (This talk is full of live demos and examples.)
 
+-------------------------------------------------------------------------------------------------
+
+Description of Windows PowerShell Windows PowerShell is a command line shell and scripting
+language for Windows that supersedes the CMD.exe shell and batch language. PowerShell is 
+also an automation engine for Windows that provides functionality similar to Windows Script 
+Host and VBScript. The PowerShell engine is hostable allowing PowerShell functionality to be 
+accessed from within custom applications including other PowerShell hosts such as PowerShell
 
 
 Powershell is the answer to something that sysadmins and pentesters
