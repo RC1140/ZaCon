@@ -10,4 +10,8 @@ if($firstTry){
 	#Only use the line below to check if there was a valid connection made
 	#if there was the title will contain the ip of the pc we are connecting to
 	$title = ps mstsc |%{$_.mainwindowtitle}
+	if($title -match $ip)
+	{
+		write-host "Connection Succeded :)"
+	}
 }
