@@ -2,8 +2,9 @@
 . SYNOPSIS
 Generates the password hash for a RDP password using Win32 Calls
 . EXAMPLE
-PS > $passWordHash = .\encrypter.ps1
-PS > $passWordHash 
+Dot Source the file first
+PS > . .\encrypter.ps1
+PS > $passWordHash = encryptPassword -password "test" 
 01000000D08C9DDF0115D1118C7A00C04FC297EB0100000080630FB7A06C204FAF5B37C7ECAA094
 90000000008000000700073007700000003660000C0000000100000007551E07D8A0434083A36FF
 F65ADED0BD0000000004800000A0000000100000004B20BB957F6B6D3CFA6D262B007B9EC110000
@@ -72,4 +73,4 @@ function encryptPassword()
 	}
 }
 
-. encryptPassword -password 'test'
+#. encryptPassword -password 

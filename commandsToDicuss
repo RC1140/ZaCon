@@ -1,4 +1,5 @@
 Get-PeHeader
 Export-csv
 ConvertTo-Xml
-
+Typing the letter # then a variable/function and then hitting tab
+will allow you to cycle all its usages
