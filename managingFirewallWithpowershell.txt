@@ -1,0 +1,83 @@
+How to manage the Windows firewall settings with PowerShell
+TechNet Blogs > James O'Neill's blog > How to manage the Windows firewall settings with PowerShell
+How to manage the Windows firewall settings with PowerShell
+jamesone
+17 Feb 2009 7:24 PM
+
+    * Comments 1
+
+I mentioned recently that I’m writing a PowerShell configuration tool for the R2 edition of Hyper-V server and Windows server core.   One of the key parts of that is managing the firewall settings…. Now… I don’t want to plug my book too much (especially as I only wrote the PowerShell part) but I had a mail from the publisher today saying copies ship from the warehouse this week and this code appears in the book (ISBN  9780470386804 , orderable through any good bookseller)
+
+The process is pretty simple. Everything firewall-related in Server 2008/Vista / Server R2/ Windows 7, is managed through the HNetCfg.FwPolicy2 COM object, so. First I define some hash tables to convert codes to meaningful text, and I define a function to translate network profiles to names. So on my home network
+
+$fw=New-object –comObject HNetCfg.FwPolicy2  ;  Convert-fwprofileType $fw.CurrentProfileTypes  
+
+returns “Private”
+
+$FWprofileTypes= @{1GB=”All”;1=”Domain”; 2=”Private” ; 4=”Public”}
+$FwAction      =@{1=”Allow”; 0=”Block”}
+$FwProtocols   =@{1=”ICMPv4”;2=”IGMP”;6=”TCP”;17=”UDP”;41=”IPv6”;43=”IPv6Route”; 44=”IPv6Frag”;
+                  47=”GRE”; 58=”ICMPv6”;59=”IPv6NoNxt”;60=”IPv6Opts”;112=”VRRP”; 113=”PGM”;115=”L2TP”;
+                  ”ICMPv4”=1;”IGMP”=2;”TCP”=6;”UDP”=17;”IPv6”=41;”IPv6Route”=43;”IPv6Frag”=44;”GRE”=47;
+                  ”ICMPv6”=48;”IPv6NoNxt”=59;”IPv6Opts”=60;”VRRP”=112; ”PGM”=113;”L2TP”=115}
+$FWDirection   =@{1=”Inbound”; 2=”outbound”; ”Inbound”=1;”outbound”=2} 
+
+ 
+
+Function Convert-FWProfileType
+{Param ($ProfileCode)
+$FWprofileTypes.keys | foreach –begin {[String[]]$descriptions= @()} `
+                                -process {if ($profileCode -bAND $_) {$descriptions += $FWProfileTypes[$_]} } `
+                                –end {$descriptions}
+}
+
+The next step is to get the general configuration of the firewall; I think my Windows 7 machine is still on the defaults, and the result looks like this
+
+Active Profiles(s) :Private 
+
+Network Type Firewall Enabled Block All Inbound Default In Default Out
+------------ ---------------- ----------------- ---------- -----------
+Domain                   True             False Block      Allow     
+Private                  True             False Block      Allow     
+Public                   True             False Block      Allow     
+
+The Code looks like this 
+
+Function Get-FirewallConfig {
+$fw=New-object –comObject HNetCfg.FwPolicy2
+"Active Profiles(s) :" + (Convert-fwprofileType $fw.CurrentProfileTypes)
+@(1,2,4) | select @{Name=“Network Type”     ;expression={$fwProfileTypes[$_]}},
+                   @{Name=“Firewall Enabled” ;expression={$fw.FireWallEnabled($_)}},
+                   @{Name=“Block All Inbound”;expression={$fw.BlockAllInboundTraffic($_)}},
+                   @{name=“Default In”       ;expression={$FwAction[$fw.DefaultInboundAction($_)]}},
+                   @{Name=“Default Out”      ;expression={$FwAction[$fw.DefaultOutboundAction($_)]}}|
+            Format-Table -auto
+}
+
+Finally comes the code to get the firewall rules. One slight pain here is that the text is often returned as pointer to a resource in a DLL, so it takes a little trial and error to find grouping information.
+The other thing to note is that a change to a rule takes effect immediately, so you can enable a group of rules as easily as :
+
+Get-FireWallRule -grouping "@FirewallAPI.dll,-29752" | foreach-object {$_.enabled = $true}
+
+ 
+
+Function Get-FireWallRule
+{Param ($Name, $Direction, $Enabled, $Protocol, $profile, $action, $grouping)
+$Rules=(New-object –comObject HNetCfg.FwPolicy2).rules
+If ($name)      {$rules= $rules | where-object {$_.name     –like $name}}
+If ($direction) {$rules= $rules | where-object {$_.direction  –eq $direction}}
+If ($Enabled)   {$rules= $rules | where-object {$_.Enabled    –eq $Enabled}}
+If ($protocol)  {$rules= $rules | where-object {$_.protocol  -eq $protocol}}
+If ($profile)   {$rules= $rules | where-object {$_.Profiles -bAND $profile}}
+If ($Action)    {$rules= $rules | where-object {$_.Action     -eq $Action}}
+If ($Grouping)  {$rules= $rules | where-object {$_.Grouping -Like $Grouping}}
+$rules}
+
+Since this the rules aren’t the easiest thing to read I usually pipe the output into format table for example
+
+Get-firewallRule -enabled $true | sort direction,applicationName,name | 
+            format-table -wrap -autosize -property Name, @{Label=”Action”; expression={$Fwaction[$_.action]}}, 
+            @{label="Direction";expression={ $fwdirection[$_.direction]}},
+@{Label=”Protocol”; expression={$FwProtocols[$_.protocol]}} , localPorts,applicationname 
+
+ 
