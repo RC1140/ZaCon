@@ -11,15 +11,17 @@ write-host 'Searching'
 
 do
 {
-    $val = ($objrecordset.Fields.Item("System.ItemName")).value
-    #$val.tostring()
-    if($val.tostring() -match $searchVal){$GLOBAL:SE_results += $val} 
+    $val = ($objrecordset.Fields.Item("System.ItemName"))
+    if($val.value.tostring() -match $searchVal){$GLOBAL:SE_results += $val;$val} 
     #$objrecordset.Fields.Item("System.ITemTypeText")
     #$objrecordset.Fields.Item("System.SIze")
     $objrecordset.MoveNext()
+#    write-host '.' -NoNewLine
+
 } Until ($objrecordset.EOF)
 
 write-host 'Search Complete'
+write-host $GLOBAL:SE_Results.Length + ' Item/s found , query $SE_Results for details'
 
 $objrecordset.Close()
 $objConnection.Close()
