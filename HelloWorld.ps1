@@ -1,5 +1,5 @@
 #Single Line Comments 
-$CleanVariableName = ''
+[int]$CleanVariableName = ''
 $CleanVariableName 
 <#
 
