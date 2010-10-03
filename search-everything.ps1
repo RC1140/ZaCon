@@ -1,6 +1,6 @@
 function search-everything()
 {
-    param($searchVal)
+    param([parameter(Mandatory=$true)]$searchVal)
 
     $objConnection = New-Object -ComObject adodb.connection
     $objrecordset = New-Object -ComObject adodb.recordset
