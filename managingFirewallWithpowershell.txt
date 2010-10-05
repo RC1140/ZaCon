@@ -4,8 +4,6 @@ How to manage the Windows firewall settings with PowerShell
 jamesone
 17 Feb 2009 7:24 PM
 
-    * Comments 1
-
 I mentioned recently that I’m writing a PowerShell configuration tool for the R2 edition of Hyper-V server and Windows server core.   One of the key parts of that is managing the firewall settings…. Now… I don’t want to plug my book too much (especially as I only wrote the PowerShell part) but I had a mail from the publisher today saying copies ship from the warehouse this week and this code appears in the book (ISBN  9780470386804 , orderable through any good bookseller)
 
 The process is pretty simple. Everything firewall-related in Server 2008/Vista / Server R2/ Windows 7, is managed through the HNetCfg.FwPolicy2 COM object, so. First I define some hash tables to convert codes to meaningful text, and I define a function to translate network profiles to names. So on my home network
