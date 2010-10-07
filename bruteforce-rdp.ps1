@@ -1,7 +1,8 @@
+<# Brute forces a rdp connection using pre built files , might be slower , can it can be distributed easily#>
 function setIp()
 {
 	param($ip);
-	#Always edit a filed called remoteServer as this is the template we use
+	#Always edit a filed called remoteServer as this is the template wecm use
 	$rdpFile = gc .\remoteServer.rdp
 	$firstLine = 'full address:s:'+$ip
 	$rdpFile[0] = $firstLine
