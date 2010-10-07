@@ -11,8 +11,7 @@ function get-applications()
 function get-firewallrules()
 {
     param([string]$rulename='Windows Media')
-    $baseRules = (New-Object -ComObject HNetCfg.FwPolicy2)
-    $baseRules.rules | ? {$_.name -match $rulename}
+    (New-Object -ComObject HNetCfg.FwPolicy2).rules | ? {$_.name -match $rulename}
 }
 
 function get-ADComputers()
