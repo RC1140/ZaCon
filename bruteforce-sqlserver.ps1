@@ -30,7 +30,7 @@ function main()
         #>
         for($i = 0;$i -lt 9999;$i++)
         {
-            if(test-SqlConnection -username 'sas' -password $i -server 'JAMEEL-Laptop\SQLEXPRESS'){break}
+            if(test-SqlConnection -username 'sas' -password $i -server '192.168.233.1\SQLEXPRESS'){break}
         }
         <#
         $passes = '123','1234','12345'
@@ -42,7 +42,7 @@ function main()
 #This is just used to measure how long it takes to scan roughly 1000 passwords 
 function time()
 {
-    Measure-Command { main }
+    main
 }
 
 . time
